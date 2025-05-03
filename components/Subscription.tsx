@@ -6,7 +6,7 @@ import {
   getOfferings,
   purchasePackage,
   checkSubscriptionStatus,
-  PRODUCT_IDS
+  // PRODUCT_IDS is not used, so we're removing it
 } from '@/lib/revenuecat';
 
 interface SubscriptionProps {
@@ -14,7 +14,29 @@ interface SubscriptionProps {
 }
 
 export default function Subscription({ onSubscriptionComplete }: SubscriptionProps) {
-  const [offerings, setOfferings] = useState<any>(null);
+  // Define a more specific type for offerings
+  interface Package {
+    identifier: string;
+    packageType: string;
+    webBillingProduct?: {
+      title?: string;
+      description?: string;
+      priceString?: string;
+      price?: string;
+    };
+  }
+
+  interface Offering {
+    identifier: string;
+    availablePackages: Package[];
+  }
+
+  interface Offerings {
+    current: Offering;
+    all: Record<string, Offering>;
+  }
+
+  const [offerings, setOfferings] = useState<Offerings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
@@ -155,7 +177,7 @@ export default function Subscription({ onSubscriptionComplete }: SubscriptionPro
       }
 
       const packageToPurchase = offerings.current.availablePackages.find(
-        (pkg: any) => pkg.identifier === packageId
+        (pkg: Package) => pkg.identifier === packageId
       );
 
       if (!packageToPurchase) {
@@ -269,7 +291,7 @@ export default function Subscription({ onSubscriptionComplete }: SubscriptionPro
       <h2 className="text-2xl font-bold mb-6 text-center">Choose Your Plan</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {offerings.current.availablePackages.map((pkg: any) => {
+        {offerings.current.availablePackages.map((pkg: Package) => {
           // Debug: Log each package
           console.log('Package:', pkg.identifier, pkg);
 

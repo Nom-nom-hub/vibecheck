@@ -66,7 +66,9 @@ export default function Home() {
   const [isHomepage, setIsHomepage] = useState(false);
 
   // Import auth context
-  const { user, loading } = useAuth();
+  // We're not using these variables yet, but we'll need them later
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { /* user, loading */ } = useAuth();
 
   // Check if we're on the homepage
   useEffect(() => {

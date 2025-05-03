@@ -73,7 +73,18 @@ export async function getUserProfile(userId: string) {
   return { data, error };
 }
 
-export async function updateUserProfile(userId: string, updates: any) {
+// Define the profile update interface
+interface ProfileUpdate {
+  username?: string;
+  full_name?: string;
+  avatar_url?: string;
+  website?: string;
+  bio?: string;
+  email?: string;
+  [key: string]: any; // Allow for other fields
+}
+
+export async function updateUserProfile(userId: string, updates: ProfileUpdate) {
   const { data, error } = await supabase
     .from('profiles')
     .update(updates)
@@ -83,7 +94,26 @@ export async function updateUserProfile(userId: string, updates: any) {
 }
 
 // Post analysis history
-export async function saveAnalysis(userId: string, postContent: string, analysisResult: any) {
+// Define the analysis result interface
+interface AnalysisResult {
+  scores: {
+    engagement: number;
+    relatability: number;
+    cringe: number;
+    originality: number;
+    clarity: number;
+    trendiness: number;
+  };
+  suggestions: Array<{
+    type: string;
+    content: string;
+  }>;
+  overallScore: number;
+  summary: string;
+  [key: string]: any; // Allow for other fields
+}
+
+export async function saveAnalysis(userId: string, postContent: string, analysisResult: AnalysisResult) {
   const { data, error } = await supabase
     .from('post_analyses')
     .insert([
@@ -109,7 +139,24 @@ export async function getUserAnalyses(userId: string) {
 }
 
 // Subscription management
-export async function saveSubscription(userId: string, subscriptionDetails: any) {
+// Define the subscription details interface
+interface SubscriptionDetails {
+  subscription_id?: string;
+  status?: string;
+  plan_id?: string;
+  plan_name?: string;
+  price_id?: string;
+  amount?: number;
+  currency?: string;
+  interval?: string;
+  start_date?: string;
+  end_date?: string;
+  trial_end?: string;
+  cancel_at_period_end?: boolean;
+  [key: string]: any; // Allow for other fields
+}
+
+export async function saveSubscription(userId: string, subscriptionDetails: SubscriptionDetails) {
   const { data, error } = await supabase
     .from('subscriptions')
     .upsert([

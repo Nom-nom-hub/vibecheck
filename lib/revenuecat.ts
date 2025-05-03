@@ -4,7 +4,8 @@ import { Purchases, LogLevel } from '@revenuecat/purchases-js';
 const REVENUECAT_PUBLIC_SDK_KEY = 'rcb_GHoOlGpwyoIPAGoFRWeFttlnqNXn'; // Production key
 
 // For debugging - set to true to use hardcoded offerings for testing
-const USE_HARDCODED_OFFERINGS = true;
+// Removing the unused variable warning
+// const USE_HARDCODED_OFFERINGS = true;
 
 // Product IDs
 export const PRODUCT_IDS = {
@@ -80,8 +81,26 @@ export const getOfferings = async () => {
       setTimeout(() => reject(new Error('Offerings request timed out after 10 seconds')), 10000);
     });
 
+    // Define a type for the offerings response
+    interface OfferingsResponse {
+      current?: {
+        identifier: string;
+        availablePackages: Array<{
+          identifier: string;
+          packageType: string;
+          webBillingProduct?: {
+            title?: string;
+            description?: string;
+            priceString?: string;
+            price?: string;
+          };
+        }>;
+      };
+      all: Record<string, any>;
+    }
+
     // Race the offerings request against the timeout
-    const offerings = await Promise.race([offeringsPromise, timeoutPromise]) as any;
+    const offerings = await Promise.race([offeringsPromise, timeoutPromise]) as OfferingsResponse;
 
     console.log('Offerings received:', offerings);
 
@@ -133,8 +152,22 @@ export const getOfferings = async () => {
   }
 };
 
+// Define the package type to match RevenueCat's requirements
+interface Package {
+  identifier: string;
+  packageType: string;
+  webBillingProduct?: {
+    title?: string;
+    description?: string;
+    priceString?: string;
+    price?: string;
+  };
+  // Add any other required properties from RevenueCat's Package type
+  [key: string]: any; // This allows for any additional properties required by RevenueCat
+}
+
 // Purchase a package
-export const purchasePackage = async (packageToPurchase: any) => {
+export const purchasePackage = async (packageToPurchase: Package) => {
   try {
     // Make sure RevenueCat is initialized
     const initialized = initializeRevenueCat();
@@ -150,8 +183,9 @@ export const purchasePackage = async (packageToPurchase: any) => {
     }
 
     // This will open the RevenueCat checkout
+    // Use type assertion to avoid TypeScript errors with the RevenueCat SDK
     const result = await Purchases.getSharedInstance().purchase({
-      rcPackage: packageToPurchase,
+      rcPackage: packageToPurchase as any,
       // Add any additional purchase parameters here if needed
     });
 

@@ -23,7 +23,7 @@ export default function Suggestions({ suggestions }: SuggestionsProps) {
 
   // Filter out empty categories
   const availableTabs = Object.entries(suggestionsByType)
-    .filter(([_, items]) => items.length > 0)
+    .filter(([, items]) => items.length > 0)
     .map(([key]) => key);
 
   // Get the suggestions to display based on active tab

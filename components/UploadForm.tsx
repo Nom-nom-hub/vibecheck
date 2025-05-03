@@ -2,10 +2,10 @@
 
 import { useState, useRef, ChangeEvent, FormEvent } from 'react';
 import { fileToBase64, validateFile } from '@/lib/fileUtils';
-import { ContentType } from '@/types';
+import { ContentType, AnalysisResponse } from '@/types';
 
 interface UploadFormProps {
-  onAnalysisComplete: (data: any) => void;
+  onAnalysisComplete: (data: AnalysisResponse) => void;
   onAnalysisStart: () => void;
 }
 
@@ -115,7 +115,25 @@ export default function UploadForm({ onAnalysisComplete, onAnalysisStart }: Uplo
       }
 
       const data = await response.json();
-      onAnalysisComplete(data);
+
+      // Transform the API response to match the expected AnalysisResponse format
+      const analysisResponse: AnalysisResponse = {
+        scoreCard: {
+          engagement: data.scores.engagement,
+          relatability: data.scores.relatability,
+          cringe: data.scores.cringe,
+          originality: data.scores.originality,
+          clarity: data.scores.clarity,
+          trendiness: data.scores.trendiness,
+          overallScore: data.overallScore
+        },
+        suggestions: data.suggestions,
+        feedbackMimic: {
+          content: data.summary
+        }
+      };
+
+      onAnalysisComplete(analysisResponse);
     } catch (error) {
       console.error('Error analyzing content:', error);
       setError(error instanceof Error ? error.message : 'An unknown error occurred');
