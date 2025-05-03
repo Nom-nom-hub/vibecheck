@@ -9,21 +9,5 @@
     "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxaHhoc21lb2Z4cHpjZndrd2NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYyNzk4NTMsImV4cCI6MjA2MTg1NTg1M30.Ffmjkc1mKDqPvhoYSKOxpc4QuIvmDZ6ZMvACVSsnzqg",
     "NEXT_PUBLIC_REVENUECAT_PUBLIC_SDK_KEY": "rcb_GHoOlGpwyoIPAGoFRWeFttlnqNXn",
     "GEMINI_API_KEY": "AIzaSyApURAEHhA40ZKqEBlbtdTnHurzb8FV5uY"
-  },
-  "builds": [
-    {
-      "src": "next.config.js",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/auth/callback",
-      "dest": "/auth/callback"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ]
+  }
 }

@@ -2,7 +2,13 @@
 
 import Link from 'next/link';
 
-export default function AuthCallbackError() {
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div className="text-center max-w-md px-4">
@@ -16,17 +22,17 @@ export default function AuthCallbackError() {
           There was a problem processing your authentication. Please try again or contact support if the issue persists.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="/login"
+          <button
+            onClick={reset}
             className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors"
           >
-            Back to Login
-          </Link>
+            Try Again
+          </button>
           <Link
-            href="/"
+            href="/login"
             className="inline-block bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-md font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
           >
-            Go to Homepage
+            Back to Login
           </Link>
         </div>
       </div>
