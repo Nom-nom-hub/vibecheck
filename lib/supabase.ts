@@ -1,10 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+// Default values for local development or preview environments
+const defaultSupabaseUrl = 'https://aqhxhsmeofxpzcfwkwco.supabase.co';
+const defaultSupabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxaHhoc21lb2Z4cHpjZndrd2NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYyNzk4NTMsImV4cCI6MjA2MTg1NTg1M30.Ffmjkc1mKDqPvhoYSKOxpc4QuIvmDZ6ZMvACVSsnzqg';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
+// Use environment variables if available, otherwise use defaults
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || defaultSupabaseUrl;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || defaultSupabaseAnonKey;
+
+// Log a warning if using default values
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  console.warn('Warning: Using default Supabase credentials. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables for production.');
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

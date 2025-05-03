@@ -1,7 +1,13 @@
 import { Purchases, LogLevel } from '@revenuecat/purchases-js';
 
 // RevenueCat API keys
-const REVENUECAT_PUBLIC_SDK_KEY = 'rcb_GHoOlGpwyoIPAGoFRWeFttlnqNXn'; // Production key
+// Use environment variable if available, otherwise use default
+const REVENUECAT_PUBLIC_SDK_KEY = process.env.NEXT_PUBLIC_REVENUECAT_PUBLIC_SDK_KEY || 'rcb_GHoOlGpwyoIPAGoFRWeFttlnqNXn'; // Production key
+
+// Log a warning if using default value
+if (!process.env.NEXT_PUBLIC_REVENUECAT_PUBLIC_SDK_KEY) {
+  console.warn('Warning: Using default RevenueCat API key. Set NEXT_PUBLIC_REVENUECAT_PUBLIC_SDK_KEY environment variable for production.');
+}
 
 // For debugging - set to true to use hardcoded offerings for testing
 // Removing the unused variable warning

@@ -6,10 +6,15 @@ const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/
  * Analyzes content using the Gemini API
  */
 export async function analyzeContent(request: AnalysisRequest): Promise<AnalysisResponse> {
-  const apiKey = process.env.GEMINI_API_KEY;
+  // Default API key for development/preview environments
+  const defaultApiKey = 'AIzaSyApURAEHhA40ZKqEBlbtdTnHurzb8FV5uY';
 
-  if (!apiKey) {
-    throw new Error('GEMINI_API_KEY is not defined in environment variables');
+  // Use environment variable if available, otherwise use default
+  const apiKey = process.env.GEMINI_API_KEY || defaultApiKey;
+
+  // Log a warning if using default value
+  if (!process.env.GEMINI_API_KEY) {
+    console.warn('Warning: Using default Gemini API key. Set GEMINI_API_KEY environment variable for production.');
   }
 
   // Prepare the prompt based on content type
