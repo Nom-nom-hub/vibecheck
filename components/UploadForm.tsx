@@ -128,9 +128,12 @@ export default function UploadForm({ onAnalysisComplete, onAnalysisStart }: Uplo
           overallScore: data.overallScore
         },
         suggestions: data.suggestions,
-        feedbackMimic: {
-          content: data.summary
-        }
+        feedbackMimic: [
+          { type: 'supportive', content: data.summary },
+          { type: 'cringe', content: 'Hmm, not sure about this one... 😬' },
+          { type: 'sarcastic', content: 'Oh wow, another post like this. How original... 🙄' },
+          { type: 'humorous', content: 'This post is so good it made my phone laugh! 😂' }
+        ]
       };
 
       onAnalysisComplete(analysisResponse);

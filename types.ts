@@ -18,13 +18,14 @@ export interface Suggestion {
 }
 
 export interface FeedbackMimic {
+  type: string;
   content: string;
 }
 
 export interface AnalysisResponse {
   scoreCard: ScoreCard;
   suggestions: Suggestion[];
-  feedbackMimic: FeedbackMimic;
+  feedbackMimic: FeedbackMimic[];
 }
 
 // Define the AnalysisResult type to match what's used in UploadForm
