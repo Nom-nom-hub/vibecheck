@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 import UploadForm from '@/components/UploadForm';
 import ScoreCard from '@/components/ScoreCard';
 import Suggestions from '@/components/Suggestions';
@@ -8,76 +10,50 @@ import FeedbackMimic from '@/components/FeedbackMimic';
 import CallToAction from '@/components/CallToAction';
 import Subscription from '@/components/Subscription';
 import SubscriptionStatus from '@/components/SubscriptionStatus';
-import LandingPage from '@/components/LandingPage';
-import { useAuth } from '@/contexts/AuthContext';
 import { AnalysisResponse } from '@/types';
 
-export default function Home() {
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+export default function Dashboard() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isCheckingSubscription, setIsCheckingSubscription] = useState(true);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null);
 
-  // Check subscription status
   useEffect(() => {
-    const checkSubscription = async () => {
-      try {
-        // Import the checkSubscriptionStatus function
-        const { checkSubscriptionStatus } = await import('@/lib/revenuecat');
-
-        // Check if the user has an active subscription
-        const { hasActiveSubscription, activeSubscription } = await checkSubscriptionStatus();
-
-        console.log('Subscription check result:', { hasActiveSubscription, activeSubscription });
-
-        // Update state based on subscription status
-        setIsSubscribed(hasActiveSubscription);
-        setIsCheckingSubscription(false);
-      } catch (error) {
-        console.error('Error checking subscription status:', error);
-        // If there's an error, assume no subscription and show the subscription screen
-        setIsSubscribed(false);
-        setIsCheckingSubscription(false);
-      }
-    };
-
-    // Start the subscription check
-    checkSubscription();
-  }, []);
+    // Redirect to login if not authenticated
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
 
   const handleAnalysisStart = () => {
     setIsAnalyzing(true);
-  };
-
-  const handleAnalysisComplete = (data: AnalysisResponse) => {
-    setAnalysisResult(data);
-    setIsAnalyzing(false);
-  };
-
-  const handleReset = () => {
     setAnalysisResult(null);
+  };
+
+  const handleAnalysisComplete = (result: AnalysisResponse) => {
+    setIsAnalyzing(false);
+    setAnalysisResult(result);
   };
 
   const handleSubscriptionComplete = () => {
     setIsSubscribed(true);
   };
 
-  // State to track if we're on the homepage
-  const [isHomepage, setIsHomepage] = useState(false);
+  const handleReset = () => {
+    setAnalysisResult(null);
+  };
 
-  // Import auth context
-  const { user, loading } = useAuth();
-
-  // Check if we're on the homepage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsHomepage(window.location.pathname === '/' || window.location.pathname === '');
-    }
-  }, []);
-
-  // Show landing page for non-subscribed users who aren't in the subscription flow
-  if (!isCheckingSubscription && !isSubscribed && isHomepage) {
-    return <LandingPage />;
+  if (loading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-lg text-gray-600 dark:text-gray-300">Loading dashboard...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -89,11 +65,26 @@ export default function Home() {
           </div>
         </div>
         <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
-          VibeCheck
+          VibeCheck Dashboard
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-300">
           The Ultimate Social Media Post Validator
         </p>
+
+        <div className="mt-4 flex justify-center space-x-4">
+          <a
+            href="/dashboard"
+            className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
+          >
+            Dashboard
+          </a>
+          <a
+            href="/settings"
+            className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:underline"
+          >
+            Account Settings
+          </a>
+        </div>
       </header>
 
       <main className="max-w-4xl mx-auto space-y-8">
@@ -104,7 +95,7 @@ export default function Home() {
           </div>
         )}
 
-        {!isCheckingSubscription && !isSubscribed && !isHomepage && (
+        {!isCheckingSubscription && !isSubscribed && (
           <Subscription onSubscriptionComplete={handleSubscriptionComplete} />
         )}
 
