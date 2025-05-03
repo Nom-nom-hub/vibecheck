@@ -16,7 +16,8 @@ export default function Dashboard() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isCheckingSubscription, setIsCheckingSubscription] = useState(true);
+  // We're using isCheckingSubscription in conditionals but not updating it after initialization
+  const [isCheckingSubscription] = useState(true);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null);
 

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -13,12 +12,12 @@ export default function LandingPage() {
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
-            <a href="/" className="-m-1.5 p-1.5 flex items-center">
+            <Link href="/" className="-m-1.5 p-1.5 flex items-center">
               <div className="bg-blue-600 text-white text-xl font-bold py-1 px-2 rounded-lg mr-2">
                 VC
               </div>
               <span className="text-xl font-semibold text-gray-900 dark:text-white">VibeCheck</span>
-            </a>
+            </Link>
           </div>
           <div className="flex lg:hidden">
             <button
@@ -65,12 +64,12 @@ export default function LandingPage() {
             <div className="fixed inset-0 z-50"></div>
             <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white dark:bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:sm:ring-gray-800">
               <div className="flex items-center justify-between">
-                <a href="/" className="-m-1.5 p-1.5 flex items-center">
+                <Link href="/" className="-m-1.5 p-1.5 flex items-center">
                   <div className="bg-blue-600 text-white text-xl font-bold py-1 px-2 rounded-lg mr-2">
                     VC
                   </div>
                   <span className="text-xl font-semibold text-gray-900 dark:text-white">VibeCheck</span>
-                </a>
+                </Link>
                 <button
                   type="button"
                   className="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-gray-300"
@@ -747,12 +746,12 @@ export default function LandingPage() {
           </div>
           <div className="mt-8 md:order-1 md:mt-0">
             <div className="flex items-center justify-center md:justify-start">
-              <a href="/" className="flex items-center">
+              <Link href="/" className="flex items-center">
                 <div className="bg-blue-600 text-white text-sm font-bold py-1 px-1.5 rounded-md mr-2">
                   VC
                 </div>
                 <span className="text-sm font-semibold text-gray-900 dark:text-white">VibeCheck</span>
-              </a>
+              </Link>
             </div>
             <p className="mt-4 text-center text-xs leading-5 text-gray-500 md:text-left">
               &copy; {new Date().getFullYear()} VibeCheck. All rights reserved.

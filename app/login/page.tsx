@@ -40,12 +40,12 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
       {/* Header/Nav */}
       <div className="w-full px-6 py-4 flex justify-between items-center">
-        <a href="/" className="flex items-center">
+        <Link href="/" className="flex items-center">
           <div className="bg-blue-600 text-white text-xl font-bold py-1 px-2 rounded-lg mr-2">
             VC
           </div>
           <span className="text-xl font-semibold text-gray-900 dark:text-white">VibeCheck</span>
-        </a>
+        </Link>
         <div>
           <span className="text-sm text-gray-600 dark:text-gray-300 mr-2">New to VibeCheck?</span>
           <Link
