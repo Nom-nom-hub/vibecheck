@@ -16,8 +16,7 @@ export default function DashboardContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [isSubscribed, setIsSubscribed] = useState(false);
-  // We're using isCheckingSubscription in conditionals but not updating it after initialization
-  const [isCheckingSubscription] = useState(true);
+  const [isCheckingSubscription, setIsCheckingSubscription] = useState(true);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null);
 
@@ -27,6 +26,21 @@ export default function DashboardContent() {
       router.push('/login');
     }
   }, [user, loading, router]);
+
+  // Add a new useEffect to check subscription status
+  useEffect(() => {
+    // Only check subscription status if user is logged in
+    if (!loading && user) {
+      // For demo purposes, we'll just set isSubscribed to true after a short delay
+      // In a real app, you would check the subscription status from your backend
+      const timer = setTimeout(() => {
+        setIsSubscribed(true);
+        setIsCheckingSubscription(false);
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [user, loading]);
 
   const handleAnalysisStart = () => {
     setIsAnalyzing(true);
